@@ -30,36 +30,59 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).send(JSON.stringify(books,null,4));
+  new Promise((res,rej) => {
+     res(JSON.stringify(books,null,4));
+  }).then(result => {
+      res.status(200).send(result)
+  }).catch(err => {
+      res.status(400).send({"message":"Something Wrong"})
+  })
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  const isbn = req.params.isbn;
-  const booksArray = Object.values(books);
-  return res.status(300).json({books:booksArray.filter((book)=>{ if(isbn==book.isbn) return book })});
+  new Promise((res,rej) => {
+    const isbn = req.params.isbn;
+    const booksArray = Object.values(books);
+    res(booksArray.filter((book)=>{ if(isbn==book.isbn) return book }));
+ }).then(result => {
+    res.status(200).json({books:result});
+ }).catch(err => {
+     res.status(400).send({"message":"Something Wrong"})
+ })
  })
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  const author = req.params.author;
-  const booksArray = Object.values(books);
-  return res.status(300).json({books:booksArray.filter((book)=>{ if(author==book.author) return book })});
+    new Promise((res,rej) => {
+        const author = req.params.author;
+        const booksArray = Object.values(books);
+        res(booksArray.filter((book)=>{ if(author==book.author) return book }));
+    }).then(result => {
+        res.status(200).json({books:result});
+    }).catch(err => {
+        res.status(400).send({"message":"Something Wrong"})
+    })
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  const title = req.params.title;
-  const booksArray = Object.values(books);
-  return res.status(300).json({books:booksArray.filter((book)=>{ if(title==book.title) return book })});
+  new Promise((res,rej) => {
+    const title = req.params.title;
+    const booksArray = Object.values(books);
+    res(booksArray.filter((book)=>{ if(title==book.title) return book }));
+  }).then(result => {
+        res.status(200).json({books:result});
+  }).catch(err => {
+        res.status(400).send({"message":"Something Wrong"})
+  })
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn;
   const booksArray = Object.values(books);
-  return res.status(300).json({reviews:booksArray.filter((book)=>{ if(isbn==book.isbn) return book })[0].reviews});
+  return res.status(200).json({reviews:booksArray.filter((book)=>{ if(isbn==book.isbn) return book })[0].reviews});
 });
 
 module.exports.general = public_users;
